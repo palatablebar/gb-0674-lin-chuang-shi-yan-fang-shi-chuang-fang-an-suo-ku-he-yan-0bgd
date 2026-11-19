@@ -1,5 +1,4 @@
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
-from datetime import datetime, timezone
 import unicodedata, re
 from app.config import SENTINELS
 from app.errors import BusinessError
@@ -25,12 +24,9 @@ def money(value):
     return format(Decimal(value).quantize(Decimal('.01'), rounding=ROUND_HALF_UP), 'f')
 
 def instant(value):
-    try:
-        dt = datetime.fromisoformat(str(value).replace('Z', '+00:00'))
-        if dt.tzinfo is None: raise ValueError
-        return dt.astimezone(timezone.utc)
-    except (ValueError, TypeError):
-        raise BusinessError('BAD_TIME', '时间缺少有效偏移')
+    # 时刻解析统一收口到 app.calendar，避免出现第二套时区口径。
+    from app.calendar import parse_instant
+    return parse_instant(value)
 
 def decstr(value):
     return format(value, 'f') if isinstance(value, Decimal) else value

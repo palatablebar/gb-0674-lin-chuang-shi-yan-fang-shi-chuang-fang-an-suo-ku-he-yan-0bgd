@@ -29,6 +29,11 @@
 | TRAP-15 | 检验单位换算 | 静默错算或证据丢失 | 以可复核规则显式处理 | `app/modules/protocol/rules.py` | `tests/test_protocol.py::test_unit_conversion_real` |
 | TRAP-23 | 访视窗末端 | 静默错算或证据丢失 | 以可复核规则显式处理 | `app/modules/windows/rules.py` | `tests/test_windows.py::test_half_open_end` |
 | TRAP-11 | UTC日历归一 | 静默错算或证据丢失 | 以可复核规则显式处理 | `app/modules/windows/rules.py` | `tests/test_windows.py::test_utc_day_equivalence` |
+| TRAP-31 | 海外中心跨午夜换日 | 当地日与研究日混用，同一访视一边窗内一边窗外 | 业务日只认Asia/Shanghai采用日，当地日仅留证 | `app/calendar.py`、`app/modules/windows/rules.py` | `tests/test_calendar.py::test_negative_offset_midnight_shift_uses_adopted_day` |
+| TRAP-32 | 方案切换跨时区边界 | 用中心当地日选错方案版本 | 生效窗按研究时区口径比较，与采用日同源 | `app/modules/protocol/rules.py` | `tests/test_calendar.py::test_protocol_switch_uses_adopted_instant_not_local_day` |
+| TRAP-33 | 复检按日历日误判 | 把72小时真实时差当成日历日差 | 按UTC即时刻差算elapsed_hours，不取整到日 | `app/modules/retest/rules.py` | `tests/test_calendar.py::test_retest_judged_by_true_elapsed_time_even_when_local_days_gap_three` |
+| TRAP-34 | 原始时刻与时区依据丢失 | 换算后覆盖原值无法复核 | at_raw/at_utc/local_offset/local_date/adopted_date全保留并入冻结包 | `app/calendar.py`、`app/archive.py` | `tests/test_calendar.py::test_raw_instant_and_timezone_basis_never_lost` |
+| TRAP-35 | 源更新后旧结论仍生效/重跑改结论 | 缓存漂移或非确定性 | 摘要绑定批号，源更新即新批；同快照重跑结论不变 | `app/manifest.py`、`app/store.py` | `tests/test_calendar.py::test_rerun_same_input_keeps_official_conclusion` |
 
 ## 对账规则
 

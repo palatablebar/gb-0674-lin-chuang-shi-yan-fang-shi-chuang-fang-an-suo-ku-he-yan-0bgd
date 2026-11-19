@@ -8,4 +8,5 @@ def digest(raw, context):
 def make_manifest(source_digest, source, elapsed):
     return {'run_id':source_digest[:16], 'sha256':source_digest, 'rule_version':RULE_VERSION,
             'source':source, 'generated_at':datetime.now(timezone.utc).isoformat(),
-            'elapsed_ms':round(elapsed*1000,3), 'timezone':'Asia/Shanghai'}
+            'elapsed_ms':round(elapsed*1000,3), 'timezone':'Asia/Shanghai',
+            'calendar_basis':'业务日=Asia/Shanghai采用日；当地日仅留证；复检按UTC真实时差'}
